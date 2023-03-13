@@ -1,0 +1,42 @@
+networks:
+  voting-app:
+    driver: bridge
+
+services:
+  vote:
+    image: vote-service
+    build:
+      context: ./vote
+      dockerfile: Dockerfile
+    ports:
+      - 5000:80
+    networks:
+      - voting-app
+  
+  redis:
+    image: redis:latest
+    networks:
+      - voting-app
+
+  worker:
+    image: worker-service
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    networks:
+      - voting-app
+
+  db:
+    image: mysql:latest
+    networks:
+      - voting-app
+
+  result:
+    image: result-service
+    build:
+      context: ./result
+      dockerfile: Dockerfile
+    ports:
+      - 5001:80
+    networks:
+      - voting-app
