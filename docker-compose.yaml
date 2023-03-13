@@ -12,6 +12,8 @@ services:
       - 80
     networks:
       - voting-app
+    depends_on:
+      -redis
   
   redis:
     image: redis:latest
@@ -25,6 +27,9 @@ services:
       dockerfile: Dockerfile
     networks:
       - voting-app
+    depends_on:
+      - redis
+      - db
 
   db:
     image: postgres:latest
@@ -40,3 +45,5 @@ services:
       - 80
     networks:
       - voting-app
+    depends_on:
+      - db
